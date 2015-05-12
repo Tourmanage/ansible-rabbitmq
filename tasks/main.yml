@@ -1,10 +1,22 @@
 ---
+- name: Check support for OS family
+  fail: msg="Distro {{ ansible_distribution }} not supported"
+  when: ansible_os_family not in ['Debian', 'RedHat']
 
-- include: repository.yml
-  when: rabbitmq_use_upstream_repository
+- include: Debian-repository.yml
+  when: ansible_os_family == 'Debian'
   tags: [repository,rabbitmq]
 
-- include: packages.yml
+- include: Debian-install.yml
+  when: ansible_os_family == 'Debian'
+  tags: [repository,rabbitmq]
+
+- include: RedHat-repository.yml
+  when: ansible_os_family == 'RedHat'
+  tags: [repository,rabbitmq]
+
+- include: RedHat-install.yml
+  when: ansible_os_family == 'RedHat'
   tags: [packages,rabbitmq]
 
 - include: config-cluster.yml

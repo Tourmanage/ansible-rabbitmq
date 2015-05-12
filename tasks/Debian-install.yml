@@ -1,0 +1,8 @@
+---
+# Install required packages
+
+- name: install erlang
+  apt: pkg=erlang state=present
+
+- name: install rabbitmq-server
+  apt: pkg=rabbitmq-server state=present

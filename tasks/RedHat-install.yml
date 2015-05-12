@@ -1,0 +1,15 @@
+---
+# Install required packages
+- name: Check if rabbitmq-server is installed
+  command: rpm -q rabbitmq-server
+  register: rpm_rabbitmq_server_check
+  failed_when: rpm_rabbitmq_server_check.rc > 1
+  changed_when: rpm_rabbitmq_server_check.rc == 1
+
+- name: install erlang
+  yum: pkg=erlang state=present
+
+- name: install rabbitmq-server
+  shell: yum --assumeyes --exclude=*\.suse install rabbitmq-server
+  when: rpm_rabbitmq_server_check.rc == 1
+

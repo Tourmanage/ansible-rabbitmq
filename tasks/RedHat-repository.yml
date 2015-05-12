@@ -1,0 +1,14 @@
+---
+# Setup installation repositories
+
+## RabbitMQ
+- name: Check if rabbitmq repository is already installed.
+  shell: yum --disablerepo=* --enablerepo=*rabbitmq-server repolist | grep rabbitmq-server
+  register: rabbitmq_repository_check
+  failed_when: rabbitmq_repository_check.rc > 1
+  changed_when: rabbitmq_repository_check.rc == 1
+
+- name: add packagecloud repository
+  sudo: true
+  shell: curl https://packagecloud.io/install/repositories/rabbitmq/rabbitmq-server/script.rpm.sh | bash
+  when: rabbitmq_repository_check.rc == 1
